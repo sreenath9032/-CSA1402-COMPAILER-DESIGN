@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <ctype.h>
+
+int main()
+{
+    char input[500];
+    int i = 0;
+
+    printf("Enter the program/code:\n");
+    fgets(input, sizeof(input), stdin);
+
+    while (input[i] != '\0')
+    {
+        /* Ignore spaces, tabs and new lines */
+        if (input[i] == ' ' || input[i] == '\t' || input[i] == '\n')
+        {
+            i++;
+            continue;
+        }
+
+        /* Ignore single-line comment */
+        if (input[i] == '/' && input[i + 1] == '/')
+        {
+            while (input[i] != '\0' && input[i] != '\n')
+                i++;
+
+            continue;
+        }
+
+        /* Ignore multi-line comment */
+        if (input[i] == '/' && input[i + 1] == '*')
+        {
+            i = i + 2;
+
+            while (input[i] != '\0' &&
+                   !(input[i] == '*' && input[i + 1] == '/'))
+            {
+                i++;
+            }
+
+            if (input[i] != '\0')
+                i = i + 2;
+
+            continue;
+        }
+
+        /* Identify identifiers */
+        if (isalpha(input[i]) || input[i] == '_')
+        {
+            printf("IDENTIFIER : ");
+
+            while (isalnum(input[i]) || input[i] == '_')
+            {
+                printf("%c", input[i]);
+                i++;
+            }
+
+            printf("\n");
+            continue;
+        }
+
+        /* Identify constants */
+        if (isdigit(input[i]))
+        {
+            printf("CONSTANT : ");
+
+            while (isdigit(input[i]))
+            {
+                printf("%c", input[i]);
+                i++;
+            }
+
+            printf("\n");
+            continue;
+        }
+
+        /* Identify operators */
+        if (input[i] == '+' || input[i] == '-' ||
+            input[i] == '*' || input[i] == '/' ||
+            input[i] == '=' || input[i] == '<' ||
+            input[i] == '>' || input[i] == '%')
+        {
+            printf("OPERATOR : %c\n", input[i]);
+            i++;
+            continue;
+        }
+
+        /* Ignore other symbols */
+        i++;
+    }
+
+    return 0;
+}
