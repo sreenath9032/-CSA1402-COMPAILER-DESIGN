@@ -1,0 +1,108 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+#define MAX 20
+
+int main()
+{
+    char input[500], token[MAX + 1];
+    int i = 0, j;
+
+    printf("Enter the C program/code:\n");
+    fgets(input, sizeof(input), stdin);
+
+    while (input[i] != '\0')
+    {
+        /* Ignore spaces, tabs and new lines */
+        if (isspace(input[i]))
+        {
+            i++;
+            continue;
+        }
+
+        /* Ignore single-line comments */
+        if (input[i] == '/' && input[i + 1] == '/')
+        {
+            while (input[i] != '\0' && input[i] != '\n')
+                i++;
+
+            continue;
+        }
+
+        /* Ignore multi-line comments */
+        if (input[i] == '/' && input[i + 1] == '*')
+        {
+            i += 2;
+
+            while (input[i] != '\0' &&
+                   !(input[i] == '*' && input[i + 1] == '/'))
+            {
+                i++;
+            }
+
+            if (input[i] != '\0')
+                i += 2;
+
+            continue;
+        }
+
+        /* Identify identifiers */
+        if (isalpha(input[i]) || input[i] == '_')
+        {
+            j = 0;
+
+            while (isalnum(input[i]) || input[i] == '_')
+            {
+                if (j < MAX)
+                    token[j++] = input[i];
+
+                i++;
+            }
+
+            token[j] = '\0';
+
+            if (j == MAX)
+                printf("IDENTIFIER : %s (truncated)\n", token);
+            else
+                printf("IDENTIFIER : %s\n", token);
+
+            continue;
+        }
+
+        /* Identify constants */
+        if (isdigit(input[i]))
+        {
+            j = 0;
+
+            while (isdigit(input[i]))
+            {
+                if (j < MAX)
+                    token[j++] = input[i];
+
+                i++;
+            }
+
+            token[j] = '\0';
+
+            printf("CONSTANT   : %s\n", token);
+            continue;
+        }
+
+        /* Identify operators */
+        if (input[i] == '+' || input[i] == '-' ||
+            input[i] == '*' || input[i] == '/' ||
+            input[i] == '=' || input[i] == '<' ||
+            input[i] == '>' || input[i] == '%')
+        {
+            printf("OPERATOR   : %c\n", input[i]);
+            i++;
+            continue;
+        }
+
+        /* Ignore other symbols */
+        i++;
+    }
+
+    return 0;
+}
