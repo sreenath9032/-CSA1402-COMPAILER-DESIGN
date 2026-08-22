@@ -1,0 +1,26 @@
+#include <stdio.h>
+
+int main()
+{
+    char ch;
+
+    printf("Enter an operator (+, -, *, /): ");
+    scanf("%c", &ch);
+
+    if (ch == '+')
+        printf("Valid Arithmetic Operator: PLUS (+)\n");
+
+    else if (ch == '-')
+        printf("Valid Arithmetic Operator: MINUS (-)\n");
+
+    else if (ch == '*')
+        printf("Valid Arithmetic Operator: MULTIPLICATION (*)\n");
+
+    else if (ch == '/')
+        printf("Valid Arithmetic Operator: DIVISION (/)\n");
+
+    else
+        printf("Invalid Operator\n");
+
+    return 0;
+}
